@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles'
+import customerService from '../services/customers'
+import AddCustomer from './AddCustomer'
 import EditCustomer from './EditCustomer'
 import AppBar from '@material-ui/core/AppBar'
 import Button from '@material-ui/core/Button'
@@ -26,14 +27,35 @@ const CustomerList = () => {
   const [customers, setCustomers] = useState([])
 
   const fetchData = () => {
-    axios.get('api/customers/content').then(response => {
-        setCustomers(response.data)
+    customerService
+      .getAll()
+      .then(response => {
+        setCustomers(response)
       })
   }
 
   useEffect(() => {
     fetchData()
   }, []);
+
+  const saveCustomer = (customer) => {
+    customerService
+      .create(customer)
+      .then(returned =>{
+        setCustomers(customers.concat(returned))
+      })
+      .catch(error => console.log(error))
+  }
+  const updateCustomer = (id, updatedCustomer) => {
+    const customer = customers.find(n => n.id === id)
+    
+    customerService
+      .update(id, updatedCustomer)
+      .then(returned =>{
+        setCustomers(customers.map(customer => customer.id !== id ? customer : returned))
+      })
+      .catch(error => console.log(error))
+  }
 
     return (
       <div>
@@ -45,6 +67,7 @@ const CustomerList = () => {
             </Typography>
           </Toolbar>
         </AppBar>
+        <AddCustomer saveCustomer={saveCustomer}/>
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="a dense table">
             <TableHead>
@@ -70,7 +93,7 @@ const CustomerList = () => {
                   <TableCell align="center">{row.city}</TableCell>
                   <TableCell align="center">{row.email}</TableCell>
                   <TableCell align="center">{row.phone}</TableCell>
-                  <TableCell align="center"><EditCustomer /></TableCell>
+                  <TableCell align="center"><EditCustomer updateCustomer={updateCustomer}/></TableCell>
                   <TableCell align="center"><Button color="secondary">Delete</Button></TableCell>
                 </TableRow>
               ))}

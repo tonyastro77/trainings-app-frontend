@@ -9,51 +9,50 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import 'semantic-ui-css/semantic.min.css';
 
 function EditCustomer(props) {
-    const [open, setOpen] = useState(false)
-    const [firstname, setFirstName] = useState('')
-    const [lastname, setLastName] = useState('')
-    const [streetaddress, setStreetAddress] = useState('')
-    const [postcode, setPostCode] = useState('')
-    const [city, setCity] = useState('')
-    const [email, setEmail] = useState('')
-    const [phone, setPhone] = useState('')
+    const [info, setInfo] = useState({ open: false, 
+        firstname: '', lastname: '', streetaddress: '', postcode: '', city: '',
+        email: '', phone: ''})
 
     const handleClickOpen = () => {
-        setOpen(true)
-        setFirstName(props.firstname)
-        setLastName(props.lastname)
-        setStreetAddress(props.streetaddress)
-        setPostCode(props.postcode)
-        setCity(props.city)
-        setEmail(props.email)
-        setPhone(props.phone)
+        setInfo({
+            open: true,
+            firstname: props.firstname,
+            lastname: props.lastname,
+            streetaddress: props.streetaddress, 
+            postcode: props.postcode,
+            city: props.city,
+            email: props.email, 
+            phone: props.phone
+        })
     }
 
     const handleClose = () => {
-        setOpen(false)
+        setInfo({open: false})
     }
 
     const inputChanged = (e) => {
-        this.setState({[e.target.name] : e.target.value})
+        const { name, value } = e.target
+        setInfo({ ...info, [name]: value })
     }
 
     const updateCustomer = () => {
         const newCustomer = {
-            firstname: firstname ,
-            lastname: lastname ,
-            streetaddress: streetaddress ,
-            postcode: postcode ,
-            city: city ,
-            email: email ,
-            phone: phone 
+            firstname: info.firstname ,
+            lastname: info.lastname ,
+            streetaddress: info.streetaddress ,
+            postcode: info.postcode ,
+            city: info.city ,
+            email: info.email ,
+            phone: info.phone 
         }
-        props.updateCustomer(props.link, newCustomer);
+        console.log(newCustomer)
+        props.updateCustomer(props.id, newCustomer)
         handleClose();
     }
     return (
         <div>
              <Dialog
-                open={open}
+                open={info.open}
                 onClose={handleClose}
                 aria-labelledby="form-dialog-title"
                 >
@@ -62,13 +61,13 @@ function EditCustomer(props) {
                     <DialogContentText>
                     Type inside the fields the information to be edited regarding the customer. Then click on "Save" in order to apply the changes or "Cancel" otherwise.
                     </DialogContentText>
-                    <TextField onChange={inputChanged} autoFocus margin="dense" value={firstname} name="firstname" label="First Name" fullWidth />
-                    <TextField onChange={inputChanged} margin="dense" value={lastname} name="lastname" label="Last Name" fullWidth />
-                    <TextField onChange={inputChanged} margin="dense" value={streetaddress} name="streetaddress" label="Street Address" fullWidth />
-                    <TextField onChange={inputChanged} margin="dense" value={postcode} name="postcode" label="Post Code" fullWidth />
-                    <TextField onChange={inputChanged} margin="dense" value={city} name="city" label="City" fullWidth />
-                    <TextField onChange={inputChanged} margin="dense" value={email} name="email" label="Email" fullWidth />
-                    <TextField onChange={inputChanged} margin="dense" value={phone} name="phone" label="Phone" fullWidth />
+                    <TextField onChange={inputChanged} autoFocus margin="dense" value={info.firstname} name="firstname" label="First Name" fullWidth />
+                    <TextField onChange={inputChanged} margin="dense" value={info.lastname} name="lastname" label="Last Name" fullWidth />
+                    <TextField onChange={inputChanged} margin="dense" value={info.streetaddress} name="streetaddress" label="Street Address" fullWidth />
+                    <TextField onChange={inputChanged} margin="dense" value={info.postcode} name="postcode" label="Post Code" fullWidth />
+                    <TextField onChange={inputChanged} margin="dense" value={info.city} name="city" label="City" fullWidth />
+                    <TextField onChange={inputChanged} margin="dense" value={info.email} name="email" label="Email" fullWidth />
+                    <TextField onChange={inputChanged} margin="dense" value={info.phone} name="phone" label="Phone" fullWidth />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
