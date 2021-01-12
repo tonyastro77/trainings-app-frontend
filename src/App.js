@@ -1,31 +1,26 @@
-import React, { useState, useEffect } from 'react'
-import fire from './config/Fire'
-import Login from './Login'
+import React from 'react'
 import Home from './Home'
-import './Navigator'
+import Login from './Login'
+import Signup from './Signup'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { AuthProvider } from './contexts/AuthContext'
+import PrivateRoute from './PrivateRoute'
 
 function App() {
-  const [user, setUser] = useState({})
 
-  useEffect(() => {
-    authListener();
-  }, []);
 
-  const authListener = () => {
-    fire.auth().onAuthStateChanged((user) => {
-      if(user) {
-        setUser(user);
-      }
-      else {
-        setUser(null);
-      }
-    });
-  }
-
-  return (
-    <div className="App">
-      {user ? (<Home />) : (<Login/>)}
-    </div>
+  return (    
+    <div>
+      <Router>
+        <AuthProvider>
+          <Switch>
+            <PrivateRoute exact path="/" component={Home} />               
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={Signup} />
+          </Switch>
+        </AuthProvider>
+      </Router>
+    </div>      
   );
 }
 

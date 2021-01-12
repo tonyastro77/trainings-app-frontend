@@ -1,15 +1,28 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {Link} from 'react-router-dom'
-import fire from './config/Fire';
-import Button from '@material-ui/core/Button'
+import { Button, Typography } from '@material-ui/core'
+import { Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'semantic-ui-css/semantic.min.css'
+import { useAuth } from './contexts/AuthContext'
+import { useHistory } from 'react-router-dom'
 
 function Navigator() {
+    const [ error, setError ] = useState('')
+    const { currentUser, logout } = useAuth()
+    const history = useHistory()
 
-    const logout = () => {
-        fire.auth().signOut();
+    async function handleLogout() {
+        setError('')
+
+        try {
+            await logout()
+            history.push('/login')
+        } catch{
+            setError('Failed to log out')
+        }
     }
+
     return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -27,7 +40,11 @@ function Navigator() {
                         </li>  
                     </ul>
                     <form class="form-inline my-2 my-lg-0">
-                    <Button color="secondary" onClick={logout}><i class="sign out alternate icon"></i>Logout</Button>
+                        {error && <Alert variant="danger">{error}</Alert>}
+                        <Typography color="secondary">
+                            <strong>Email: </strong> {currentUser.email}
+                        </Typography>                     
+                        <Button color="secondary" onClick={handleLogout}><i class="sign out alternate icon"></i>Logout</Button>
                     </form>
                 </div>    
             </nav>

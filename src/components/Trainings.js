@@ -3,7 +3,6 @@ import React from 'react'
 function Trainings() {
     return (
         <div>
-            
         </div>
     )
 }
