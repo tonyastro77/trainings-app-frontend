@@ -13,17 +13,17 @@ function Home() {
     return (
         <div>
             <Router>
-            <AuthProvider>
-                <div>
-                    <Navigator />
-                    <Switch>
-                    <Route exact path="/" component={CustomerList} />                    
-                    <Route path="/trainings" render={() => <Trainings />} />
-                    <Route path="/calendar" render={() => <CalendarTrainings />} />
-                    <Route render={() => <h1>Page not found</h1>} />      
-                    </Switch>
-                </div>      
-            </AuthProvider>             
+                <AuthProvider>
+                    <div>
+                        <Navigator />
+                        <Switch>
+                        <Route exact path="/" component={CustomerList} />                    
+                        <Route path="/trainings" render={() => <Trainings />} />
+                        <Route path="/calendar" render={() => <CalendarTrainings />} />
+                        <Route render={() => <h1>Page not found</h1>} />      
+                        </Switch>
+                    </div>      
+                </AuthProvider>             
             </Router>   
         </div>
     )
