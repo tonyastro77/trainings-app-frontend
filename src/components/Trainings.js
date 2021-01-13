@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import customerService from '../services/customers'
 import trainingService from '../services/trainings'
 import AddTraining from './AddTraining'
 import AppBar from '@material-ui/core/AppBar'
@@ -30,7 +29,6 @@ const useStyles = makeStyles({
 
 function Trainings() {
     const classes = useStyles()
-    const [customers, setCustomers] = useState([])
     const [trainings, setTrainings] = useState([])
     const [message, setMessage] = useState('')
     const [open, setOpen] = useState(false)
@@ -63,7 +61,6 @@ function Trainings() {
     const deleteTraining = (id, deletedTraining) => {
         if (window.confirm("Are you sure you want to delete this training info?")){
           const newTrainingList = trainings.filter(n => n.id !== id)
-          console.log(newTrainingList)
       
           trainingService
             .deleteItem(id, deletedTraining)
@@ -109,7 +106,7 @@ function Trainings() {
                                 <TableCell className={classes.tableCell} align="center">{moment(row.date).format("MMMM Do YYYY")}</TableCell>
                                 <TableCell className={classes.tableCell} align="center">{row.duration}</TableCell>
                                 <TableCell className={classes.tableCell} align="center">{row.activity}</TableCell>
-                                <TableCell className={classes.tableCell} align="center">{row.firstname}</TableCell>
+                                <TableCell className={classes.tableCell} align="center">{row.customer}</TableCell>
                                 <TableCell align="center"><Button color="secondary" onClick={() => deleteTraining(row.id, row)}>Delete</Button></TableCell>
                             </TableRow>
                         ))}

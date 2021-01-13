@@ -25,7 +25,7 @@ const useStyles = makeStyles({
         color: theme.palette.secondary.main
     },
     titleHome: {
-        color: '#ffffff',
+        color: theme.palette.secondary.main,
         fontSize: '1rem',
     },
     formControl: {
@@ -36,9 +36,10 @@ const useStyles = makeStyles({
 function AddTraining(props) {
     const classes = useStyles()
     const [customers, setCustomers] = useState([])
-
+    const [duration, setDuration] = useState('')
+    const [activity, setActivity] = useState('')
     const [info, setInfo] = useState({ open: false, 
-        duration: '', activity: '', firstname: '', lastname: ''})
+     customer: ''})
 
     const [selectedDate, setSelectedDate] = React.useState(new Date())
 
@@ -60,17 +61,11 @@ function AddTraining(props) {
 
     const handleClose = () => {
         setInfo({open: false})
-        console.log(customers)
-    }
-    
-    const inputChanged = (e) => {
-        const { name, value } = e.target
-        setInfo({ ...info, [name]: value })
     }
 
     const handleChanged = (e) => {
         e.preventDefault();
-        setInfo({ firstname: e.target.value, open: true} );
+        setInfo({ customer: e.target.value, open: true} );
     }
 
     const handleDateChange = (date) => {
@@ -80,10 +75,9 @@ function AddTraining(props) {
     const addTraining = () => {
         const newTraining = {
             date: selectedDate,
-            duration: info.duration,
-            activity: info.activity,
-            firstname: info.firstname,
-            lastname: info.lastname,
+            duration: duration,
+            activity: activity,
+            customer: info.customer,
         }
         props.saveTraining(newTraining)
         handleClose();
@@ -126,15 +120,15 @@ function AddTraining(props) {
                     </MuiPickersUtilsProvider>
                 </FormControl>     
                 <InputLabel id="demo-simple-select-label">Duration (minutes)</InputLabel>
-                <TextField InputProps={{className: classes.input}} onChange={inputChanged} margin="dense" name="duration" fullWidth />
+                <TextField InputProps={{className: classes.input}} onChange={(e) => setDuration(e.target.value)} margin="dense" name="duration" fullWidth />
                 <InputLabel id="demo-simple-select-label">Activity</InputLabel>
-                <TextField InputProps={{className: classes.input}} onChange={inputChanged} margin="dense" name="activity" fullWidth />
+                <TextField InputProps={{className: classes.input}} onChange={(e) => setActivity(e.target.value)} margin="dense" name="activity" fullWidth />
                 <InputLabel id="demo-simple-select-label">Customer</InputLabel>
                 <FormControl className={classes.formControl}>              
                     <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={info.firstname}
+                        value={info.customer}
                         onChange={handleChanged}
                         classes={{
                             root: classes.titleHome,
